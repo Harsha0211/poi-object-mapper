@@ -1,9 +1,6 @@
 package io.github.millij.poi.ss.writer;
 
 import io.github.millij.poi.ss.model.annotations.Sheet;
-
-import io.github.millij.poi.ss.model.annotations.SheetColumn;
-import io.github.millij.poi.util.Beans;
 import io.github.millij.poi.util.Spreadsheet;
 
 import java.io.File;
@@ -11,16 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +61,7 @@ public class SpreadsheetWriter {
     public <EB> void addSheet(Class<EB> beanType, List<EB> rowObjects) {
         // Sheet Headers
         List<String> headers = Spreadsheet.getColumnNames(beanType);
-        
+
         this.addSheet(beanType, rowObjects, headers);
     }
 
@@ -81,8 +69,7 @@ public class SpreadsheetWriter {
         // SheetName
         Sheet sheet = beanType.getAnnotation(Sheet.class);
         String sheetName = sheet != null ? sheet.value() : null;
-        System.out.println("Sheetname"+sheetName);
-        
+
         this.addSheet(beanType, rowObjects, headers, sheetName);
     }
 
@@ -129,58 +116,15 @@ public class SpreadsheetWriter {
 
             // Data Rows
             Map<String, List<String>> rowsData = this.prepareSheetRowsData(headers, rowObjects);
-            
-            
             for (int i = 0, rowNum = 1; i < rowObjects.size(); i++, rowNum++) {
                 final XSSFRow row = sheet.createRow(rowNum);
-                
-                
-                Map<String,String> dateFormatsMap = this.getFormats(beanType);
-                
-                List<String> formulaCols = this.getFormulaCols(beanType);
-                
+
                 int cellNo = 0;
                 for (String key : rowsData.keySet()) {
                     Cell cell = row.createCell(cellNo);
-                    
-                    String keyFormat = dateFormatsMap.get(key);
-                    if(keyFormat != null)
-                    {
-                    	
-                        try {
-                        	
-                        	String value = rowsData.get(key).get(i);
-                        	
-                        	
-                        	LocalDate harsha = LocalDate.parse(value,DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(keyFormat);
-                                    
-                            String formattedDateTime = harsha.format(formatter);
-                            
-                            //String value = rowsData.get(key).get(i);
-                        	cell.setCellValue(formattedDateTime);
-                        	cellNo++;
-
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    	                    	                                	
-                    }
-                    else if(formulaCols.contains(key)){
-                    	String value = rowsData.get(key).get(i);
-                    	cell.setCellFormula(value);
-                    	cellNo++;
-                    	
-                    }
-                    else {
-                    	
-                    	String value = rowsData.get(key).get(i);
-                    	cell.setCellValue(value);
-                    	cellNo++;
-                    }
+                    String value = rowsData.get(key).get(i);
+                    cell.setCellValue(value);
+                    cellNo++;
                 }
             }
 
@@ -227,88 +171,6 @@ public class SpreadsheetWriter {
         return sheetData;
     }
 
-    
-    
-    public static Map<String,String> getFormats(Class<?> beanType)
-    {
-    
-    	if (beanType == null) {
-            throw new IllegalArgumentException("getColumnToPropertyMap :: Invalid ExcelBean type - " + beanType);
-        }
 
-        Map<String, String> headFormatMap = new HashMap<String, String>();
 
-        // Fields
-        Field[] fields = beanType.getDeclaredFields();
-        
-        for (Field f : fields) {
-            
-            SheetColumn ec = f.getAnnotation(SheetColumn.class);
-            
-            if (ec != null && StringUtils.isNotEmpty(ec.value())) 
-            {
-            	if(ec.isFormatted())
-            		headFormatMap.put(ec.value(), ec.format());
-            }
-        }
-
-        // Methods
-        Method[] methods = beanType.getDeclaredMethods();
-        
-        for (Method m : methods) {
-        	
-            SheetColumn ec = m.getAnnotation(SheetColumn.class);
-            
-            if (ec != null && StringUtils.isNotEmpty(ec.value())) 
-            {
-            	if(ec.isFormatted())
-            		headFormatMap.put(ec.value(), ec.format());
-            }
-        }
-
-        return headFormatMap;
-    }
-    
-    
-    public static List<String> getFormulaCols(Class<?> beanType)
-    {
-    	if (beanType == null) {
-            throw new IllegalArgumentException("getColumnToPropertyMap :: Invalid ExcelBean type - " + beanType);
-        }
-
-    	List<String> formulaCols = new ArrayList<String>();
-
-        // Fields
-        Field[] fields = beanType.getDeclaredFields();
-        
-        for (Field f : fields) {
-            
-            SheetColumn ec = f.getAnnotation(SheetColumn.class);
-            
-            if (ec != null && StringUtils.isNotEmpty(ec.value())) 
-            {
-            	if(ec.isFromula())
-            		formulaCols.add(ec.value());
-            }
-        }
-
-        // Methods
-        Method[] methods = beanType.getDeclaredMethods();
-        
-        for (Method m : methods) {
-        	
-            SheetColumn ec = m.getAnnotation(SheetColumn.class);
-            
-            if (ec != null && StringUtils.isNotEmpty(ec.value())) 
-            {
-            	if(ec.isFromula())
-            		formulaCols.add(ec.value());
-            }
-        }
-
-		return formulaCols;
-    	
-    }
-
-    
 }
