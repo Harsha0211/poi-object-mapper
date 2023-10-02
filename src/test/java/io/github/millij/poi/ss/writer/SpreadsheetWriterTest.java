@@ -1,6 +1,7 @@
 package io.github.millij.poi.ss.writer;
 
 import io.github.millij.bean.Company;
+
 import io.github.millij.bean.Employee;
 import io.github.millij.poi.ss.writer.SpreadsheetWriter;
 
@@ -55,9 +56,9 @@ public class SpreadsheetWriterTest {
 
         // Employees
         List<Employee> employees = new ArrayList<Employee>();
-        employees.add(new Employee("1", "foo", 12, "MALE", 1.68));
-        employees.add(new Employee("2", "bar", null, "MALE", 1.68));
-        employees.add(new Employee("3", "foo bar", null, null, null));
+        employees.add(new Employee("1", "foo", 12, "MALE", 1.68,"F2+G2","02/11/2001","Chennai"));
+        employees.add(new Employee("2", "bar", 24, "MALE", 1.98,"F3+G3","03/11/2001","Banglore"));
+        employees.add(new Employee("3", "foo bar", 10, "FEMALE",2.0, "F4+G4","04/11/2001","Kolkata"));
 
         // Write
         gew.addSheet(Employee.class, employees);
@@ -74,9 +75,9 @@ public class SpreadsheetWriterTest {
 
         // Employees
         List<Employee> employees = new ArrayList<Employee>();
-        employees.add(new Employee("1", "foo", 12, "MALE", 1.68));
-        employees.add(new Employee("2", "bar", null, "MALE", 1.68));
-        employees.add(new Employee("3", "foo bar", null, null, null));
+        employees.add(new Employee("1", "foo", 12, "MALE", 1.68,"F2+G2","02/11/2001","Chennai"));
+        employees.add(new Employee("2", "bar", 24, "MALE", 1.98,"F3+G3","03/11/2001","Banglore"));
+        employees.add(new Employee("3", "foo bar", 10, "FEMALE",2.0, "F4+G4","04/11/2001","Kolkata"));
 
         List<String> headers = Arrays.asList("ID", "Age", "Name", "Address");
 
@@ -98,9 +99,9 @@ public class SpreadsheetWriterTest {
 
         // Employees
         List<Employee> employees = new ArrayList<Employee>();
-        employees.add(new Employee("1", "foo", 12, "MALE", 1.68));
-        employees.add(new Employee("2", "bar", null, "MALE", 1.68));
-        employees.add(new Employee("3", "foo bar", null, null, null));
+        employees.add(new Employee("1", "foo", 12, "MALE", 1.68,"F2+G2","02/11/2001","Chennai"));
+        employees.add(new Employee("2", "bar", 24, "MALE", 1.98,"F3+G3","03/11/2001","Banglore"));
+        employees.add(new Employee("3", "foo bar", 10, "FEMALE",2.0, "F4+G4","04/11/2001","Kolkata"));
 
         // Campanies
         List<Company> companies = new ArrayList<Company>();

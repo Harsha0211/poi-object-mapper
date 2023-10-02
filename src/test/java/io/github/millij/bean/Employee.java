@@ -1,6 +1,8 @@
 package io.github.millij.bean;
 
 import io.github.millij.poi.ss.model.annotations.Sheet;
+
+
 import io.github.millij.poi.ss.model.annotations.SheetColumn;
 
 
@@ -8,7 +10,10 @@ import io.github.millij.poi.ss.model.annotations.SheetColumn;
 public class Employee {
 
     // Note that Id and Name are annotated at name level
+	
     private String id;
+	
+	
     private String name;
 
     @SheetColumn("Age")
@@ -19,9 +24,15 @@ public class Employee {
 
     @SheetColumn("Height (mts)")
     private Double height;
-
-    @SheetColumn("Address")
+    
+    @SheetColumn(value="Formula",isFromula=true)
+    private String formula;
+    
+	@SheetColumn("Address")
     private String address;
+    
+    @SheetColumn(value="Date",isFormatted=true,format="yyyy/MM/dd")
+    private String date;
 
 
     // Constructors
@@ -31,7 +42,7 @@ public class Employee {
         // Default
     }
 
-    public Employee(String id, String name, Integer age, String gender, Double height) {
+    public Employee(String id, String name, Integer age, String gender, Double height,String formula,String date,String address) {
         super();
 
         this.id = id;
@@ -39,6 +50,9 @@ public class Employee {
         this.age = age;
         this.gender = gender;
         this.height = height;
+        this.date = date;
+        this.address = address;
+        this.formula = formula;
     }
 
 
@@ -94,15 +108,34 @@ public class Employee {
     public void setAddress(String address) {
         this.address = address;
     }
+    
+    public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
+	public String getFormula() {
+		return formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
+	}
+
+
+    
 
 
     // Object Methods
-    // ------------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
-    @Override
+    
     public String toString() {
         return "Employee [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", height=" + height
-                + ", address=" + address + "]";
+                + ", date=" + date + "Formula="+formula+ "]";
     }
 
 
